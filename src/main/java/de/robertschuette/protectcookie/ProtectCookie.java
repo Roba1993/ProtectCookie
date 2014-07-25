@@ -74,6 +74,32 @@ public class ProtectCookie {
     }
 
     /**
+     * This function secures one Cookie. The return value is the new secured
+     * value. The given key is also secured and can't changed after this
+     * function.
+     *
+     * @param key coookie key
+     * @param value cookie value
+     * @return secured cookie value
+     */
+    public static String secureCookie(String key, String value) {
+        return generateProtectedCookie(key, value);
+    }
+
+    /**
+     * This function secures one Cookie. The return value is the new unsecured
+     * value. When there was change in the key or value, the returnd value is
+     * null.
+     *
+     * @param key cookie key
+     * @param value secured cookie value
+     * @return unsecured cookie value
+     */
+    public static String unsecureCookie(String key, String value) {
+        return generateUnprotectedCookie(key, value);
+    }
+
+    /**
      * This function set's the privateKey for this application. The privateKey
      * is used to encrypt the cookies and save them against modification.
      *
@@ -120,6 +146,11 @@ public class ProtectCookie {
      * @return
      */
     private static String generateProtectedCookie(String name, String value) {
+        //no null values allowed
+        if (name == null || value == null) {
+            return null;
+        }
+
         //unmask all +
         value = value.replaceAll("\\+", "&#43;");
 
@@ -141,6 +172,10 @@ public class ProtectCookie {
      * @return
      */
     private static String generateUnprotectedCookie(String name, String value) {
+        if (name == null || value == null) {
+            return null;
+        }
+
         //split the value to value and hash
         String split[] = value.split("\\+", 2);
 
