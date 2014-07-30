@@ -3,6 +3,7 @@ package de.robertschuette.protectcookie;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
+import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.jasypt.util.text.BasicTextEncryptor;
 
@@ -83,6 +84,8 @@ public class ProtectCookie {
      * @return secured cookie value
      */
     public static String secureCookie(String key, String value) {
+        //we need a private key
+        checkPrivateKey();
         return generateProtectedCookie(key, value);
     }
 
@@ -96,6 +99,8 @@ public class ProtectCookie {
      * @return unsecured cookie value
      */
     public static String unsecureCookie(String key, String value) {
+        //we need a private key
+        checkPrivateKey();
         return generateUnprotectedCookie(key, value);
     }
 
@@ -188,7 +193,11 @@ public class ProtectCookie {
         String hash = split[1];
 
         //get the old hash with decryption
+        try {
         hash = textEncryptor.decrypt(hash);
+        } catch(EncryptionOperationNotPossibleException ex){
+            return null;
+        }
 
         //when the hash's are equals no one has modified them and we can use them
         if (passwordEncryptor.checkPassword(name + "+" + value, hash)) {
