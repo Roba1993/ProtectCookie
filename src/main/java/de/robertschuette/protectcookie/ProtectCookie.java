@@ -1,6 +1,7 @@
 package de.robertschuette.protectcookie;
 
 import java.security.SecureRandom;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
@@ -23,17 +24,17 @@ public class ProtectCookie {
      * @param cookies The unsecured cookies
      * @return The secured cookies
      */
-    public static Map<String, String> secureCookies(Map<String, String> cookies) {
+    public Map<String, String> secureCookies(Map<String, String> cookies) {
         //we need a private key
         checkPrivateKey();
 
-        //Return map
-        HashMap<String, String> out = new HashMap<String, String>();
-
         //cookies in the map?
         if (cookies == null || cookies.isEmpty()) {
-            return out;
+            return Collections.emptyMap();
         }
+        
+        //Return map
+        HashMap<String, String> out = new HashMap<String, String>();
 
         //loop all cookies
         for (Map.Entry<String, String> entry : cookies.entrySet()) {
@@ -52,7 +53,7 @@ public class ProtectCookie {
      * @param cookies
      * @return
      */
-    public static Map<String, String> unsecureCookies(Map<String, String> cookies) {
+    public Map<String, String> unsecureCookies(Map<String, String> cookies) {
         //we need a private key
         checkPrivateKey();
 
@@ -83,7 +84,7 @@ public class ProtectCookie {
      * @param value cookie value
      * @return secured cookie value
      */
-    public static String secureCookie(String key, String value) {
+    public String secureCookie(String key, String value) {
         //we need a private key
         checkPrivateKey();
         return generateProtectedCookie(key, value);
@@ -98,7 +99,7 @@ public class ProtectCookie {
      * @param value secured cookie value
      * @return unsecured cookie value
      */
-    public static String unsecureCookie(String key, String value) {
+    public String unsecureCookie(String key, String value) {
         //we need a private key
         checkPrivateKey();
         return generateUnprotectedCookie(key, value);
@@ -110,7 +111,7 @@ public class ProtectCookie {
      *
      * @param privateKey
      */
-    public static void setPrivateKey(String privateKey) {
+    public void setPrivateKey(String privateKey) {
         ProtectCookie.privateKey = privateKey;
         textEncryptor = new BasicTextEncryptor();
         textEncryptor.setPassword(privateKey);
@@ -121,7 +122,7 @@ public class ProtectCookie {
      * This functions checks if a privateKey exist. If not the fucntion creates
      * a new random private key.
      */
-    private static void checkPrivateKey() {
+    private void checkPrivateKey() {
         //generate a new random key if not exist
         if (privateKey == null) {
 
@@ -150,7 +151,7 @@ public class ProtectCookie {
      * @param value
      * @return
      */
-    private static String generateProtectedCookie(String name, String value) {
+    private String generateProtectedCookie(String name, String value) {
         //no null values allowed
         if (name == null || value == null) {
             return null;
@@ -176,7 +177,7 @@ public class ProtectCookie {
      * @param value
      * @return
      */
-    private static String generateUnprotectedCookie(String name, String value) {
+    private String generateUnprotectedCookie(String name, String value) {
         if (name == null || value == null) {
             return null;
         }

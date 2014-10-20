@@ -26,8 +26,10 @@ public class ProtectCookieTest {
 
     @Test
     public void simpleCookieTest() {
+        ProtectCookie pc = new ProtectCookie();
+        
         //secure the cookies
-        Map<String, String> secure = ProtectCookie.secureCookies(cookies);
+        Map<String, String> secure = pc.secureCookies(cookies);
 
         //secured must be different from unsecured
         for (Map.Entry<String, String> entry : cookies.entrySet()) {
@@ -35,7 +37,7 @@ public class ProtectCookieTest {
         }
 
         //unsecure the cookies
-        Map<String, String> unsecure = ProtectCookie.unsecureCookies(secure);
+        Map<String, String> unsecure = pc.unsecureCookies(secure);
 
         //check if the unsecured cookies the same as the input
         for (Map.Entry<String, String> entry : cookies.entrySet()) {
@@ -45,8 +47,10 @@ public class ProtectCookieTest {
 
     @Test
     public void changeCookieTest() {
+        ProtectCookie pc = new ProtectCookie();
+        
         //secure the cookies
-        Map<String, String> secure = ProtectCookie.secureCookies(cookies);
+        Map<String, String> secure = pc.secureCookies(cookies);
 
         //change first two letters
         for (Map.Entry<String, String> entry : secure.entrySet()) {
@@ -54,11 +58,10 @@ public class ProtectCookieTest {
         }
 
         //unsecure the cookies
-        Map<String, String> unsecure = ProtectCookie.unsecureCookies(secure);
+        Map<String, String> unsecure = pc.unsecureCookies(secure);
 
         //check if the unsecured cookies the same as the input
         for (Map.Entry<String, String> entry : unsecure.entrySet()) {
-            System.out.println(entry.getValue());
             assertNull("is change must be null", entry.getValue());
         }
     }
